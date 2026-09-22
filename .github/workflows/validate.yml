@@ -1,0 +1,99 @@
+name: Validate Part 1 Planning Documents
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  workflow_dispatch:
+
+jobs:
+  validate-structure:
+    name: Validate /docs structure and SQL script
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Verify the /docs folder exists
+        run: |
+          if [ ! -d "docs" ]; then
+            echo "::error::The /docs folder is missing from the repository root."
+            exit 1
+          fi
+          echo "Found /docs:"
+          ls -la docs
+
+      - name: Verify the ERD is present (PNG or PDF)
+        run: |
+          shopt -s nullglob nocaseglob
+          erd=(docs/*erd*.png docs/*erd*.pdf)
+          if [ ${#erd[@]} -eq 0 ]; then
+            echo "::error::No ERD image found in /docs. Expected a file matching *ERD*.png or *ERD*.pdf."
+            exit 1
+          fi
+          echo "ERD found: ${erd[*]}"
+
+      - name: Verify the API endpoint plan is present
+        run: |
+          shopt -s nullglob nocaseglob
+          plan=(docs/*endpoint*.md docs/*endpoint*.pdf docs/*api*.md docs/*api*.pdf)
+          if [ ${#plan[@]} -eq 0 ]; then
+            echo "::error::No API endpoint plan found in /docs."
+            exit 1
+          fi
+          echo "Endpoint plan found: ${plan[*]}"
+
+      - name: Verify the SQL script is present
+        run: |
+          shopt -s nullglob nocaseglob
+          sql=(docs/*.sql)
+          if [ ${#sql[@]} -eq 0 ]; then
+            echo "::error::No .sql script found in /docs."
+            exit 1
+          fi
+          echo "SQL script found: ${sql[*]}"
+          echo "SQL_FILE=${sql[0]}" >> "$GITHUB_ENV"
+
+      - name: Check the SQL script creates and seeds the schema
+        run: |
+          file="$SQL_FILE"
+          tables=$(grep -ciE "^[[:space:]]*CREATE[[:space:]]+TABLE" "$file" || true)
+          inserts=$(grep -ciE "^[[:space:]]*INSERT[[:space:]]+INTO" "$file" || true)
+          echo "CREATE TABLE statements: $tables"
+          echo "INSERT INTO statements:  $inserts"
+
+          if [ "$tables" -lt 6 ]; then
+            echo "::error::The SQL script defines $tables tables; the brief requires at least 6 entities."
+            exit 1
+          fi
+          if [ "$inserts" -lt 4 ]; then
+            echo "::error::The SQL script contains only $inserts INSERT statements; seed data is required."
+            exit 1
+          fi
+
+          for keyword in "PRIMARY KEY" "FOREIGN KEY" "NOT NULL" "UNIQUE" "DEFAULT"; do
+            if ! grep -qi "$keyword" "$file"; then
+              echo "::error::The SQL script does not use '$keyword'. All key types and constraints are required."
+              exit 1
+            fi
+            echo "Constraint present: $keyword"
+          done
+
+      - name: Verify the README exists and is complete
+        run: |
+          if [ ! -f "README.md" ]; then
+            echo "::error::README.md is missing from the repository root."
+            exit 1
+          fi
+          for section in "Organiser" "Participant"; do
+            if ! grep -qi "$section" README.md; then
+              echo "::error::README.md does not describe the $section role."
+              exit 1
+            fi
+          done
+          echo "README.md present and describes both roles."
+
+      - name: Summary
+        run: echo "All Part 1 planning artefacts validated successfully."
