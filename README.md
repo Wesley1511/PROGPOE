@@ -57,6 +57,7 @@ Relationships:
 The workflow in .github/workflows/validate-docs.yml runs on every push and pull request and fails the build if any required planning document is missing, if the SQL script does not contain the expected CREATE TABLE and INSERT statements, or if the ERD image is absent.
 
 Screenshot:
+!\[successful screenshot](docs/CICD.png)
 
 ## 6: Video walkthrough
 
@@ -65,6 +66,4 @@ Video:
 ## 7: AI Disclosure
 
 Claude was consulted for the creation of the description fields in the API endpoints document aswell as creating the sample data in the sql script. It was also used to fix a bug in the Validate.yml file that was causing a check to always return with exit code 1
-
-
 
