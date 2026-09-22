@@ -80,5 +80,9 @@ Screenshot:
 
 Video:
 
+## 8: AI Disclosure
+
+Claude was consulted for the creation of the description fields in the API endpoints document aswell as creating the sample data in the sql script. It was also used to fix a bug in the Validate.yml file that was causing a check to always return with exit code 1
+
 
 
