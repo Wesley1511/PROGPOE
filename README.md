@@ -62,7 +62,7 @@ Screenshot:
 
 ## 6: Video walkthrough
 
-Video:
+Video: https://www.youtube.com/watch?v=29nPRYdDqjA
 
 ## 7: AI Disclosure
 
