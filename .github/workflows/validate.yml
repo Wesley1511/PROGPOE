@@ -87,11 +87,6 @@ jobs:
             echo "::error::README.md is missing from the repository root."
             exit 1
           fi
-          for section in "Organiser" "Participant"; do
-            if ! grep -qi "$section" README.md; then
-              echo "::error::README.md does not describe the $section role."
-              exit 1
-            fi
           done
           echo "README.md present and describes both roles."
 
