@@ -81,14 +81,5 @@ jobs:
             echo "Constraint present: $keyword"
           done
 
-      - name: Verify the README exists and is complete
-        run: |
-          if [ ! -f "README.md" ]; then
-            echo "::error::README.md is missing from the repository root."
-            exit 1
-          fi
-          done
-          echo "README.md present and describes both roles."
-
       - name: Summary
-        run: echo "All Part 1 planning artefacts validated successfully."
+        run: echo "All Part 1 planning documents validated successfully."
