@@ -57,7 +57,8 @@ Relationships:
 The workflow in .github/workflows/validate-docs.yml runs on every push and pull request and fails the build if any required planning document is missing, if the SQL script does not contain the expected CREATE TABLE and INSERT statements, or if the ERD image is absent.
 
 Screenshot:
-!\[successful screenshot](docs/CICD.png)
+![successful screenshot](docs/CICD.png)
+
 
 ## 6: Video walkthrough
 
