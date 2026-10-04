@@ -1,0 +1,6 @@
+@PROGPOE_HostAddress = http://localhost:5078
+
+GET {{PROGPOE_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
