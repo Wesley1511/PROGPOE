@@ -1,4 +1,4 @@
-namespace PROGPOE
+namespace RaceDay.Api
 {
     public class WeatherForecast
     {
