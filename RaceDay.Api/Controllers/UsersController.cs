@@ -38,7 +38,7 @@ public class UsersController(RaceDayDbContext db) : ApiControllerBase
         return Ok(ToResponse(user));
     }
 
-    /// <summary>Creates or updates the participant-only profile (club, shirt size, emergency contact, medical notes).</summary>
+    /// <summary>Creates or updates the participant-only profile.</summary>
     [HttpPut("me/profile"), Authorize(Roles = RoleNames.Participant)]
     [ProducesResponseType<ProfileResponse>(Status200OK)]
     [ProducesResponseType(Status400BadRequest)]
@@ -85,7 +85,7 @@ public class UsersController(RaceDayDbContext db) : ApiControllerBase
             user.Profile is null ? null : ToProfile(user.Profile)));
     }
 
-    /// <summary>Soft-deletes the signed-in account (IsActive = false); historical results are retained.</summary>
+    /// <summary>Soft-deletes the signed-in account historical results are retained.</summary>
     [HttpDelete("me")]
     [ProducesResponseType(Status204NoContent)]
     [ProducesResponseType(Status409Conflict)]

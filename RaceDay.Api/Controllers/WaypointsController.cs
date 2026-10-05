@@ -11,7 +11,7 @@ namespace RaceDay.Api.Controllers;
 [Route("api")]
 public class WaypointsController(RaceDayDbContext db) : ApiControllerBase
 {
-    /// <summary>Returns the ordered route points (start, water points, markers, finish) used to draw the route map.</summary>
+    /// <summary>Returns the ordered route points used to draw the route map.</summary>
     [HttpGet("categories/{categoryId:int}/waypoints"), AllowAnonymous]
     [ProducesResponseType<List<WaypointResponse>>(Status200OK)]
     [ProducesResponseType(Status404NotFound)]

@@ -120,7 +120,7 @@ public class EventsController(RaceDayDbContext db, IWeatherService weather) : Ap
         return Ok(await LoadDetailAsync(id));
     }
 
-    /// <summary>Deletes an event that has no confirmed enrolments; otherwise it must be cancelled instead.</summary>
+    /// <summary>Deletes an event that has no confirmed enrolments otherwise it must be cancelled instead.</summary>
     [HttpDelete("{id:int}"), Authorize(Roles = RoleNames.Organiser)]
     [ProducesResponseType(Status204NoContent)]
     [ProducesResponseType(Status403Forbidden)]
@@ -139,7 +139,7 @@ public class EventsController(RaceDayDbContext db, IWeatherService weather) : Ap
         return NoContent();
     }
 
-    /// <summary>Moves an event between Draft, Published, Cancelled and Completed without touching the rest of the record.</summary>
+    /// <summary>Moves an event between Draft, Published, Cancelled and Completed</summary>
     [HttpPatch("{id:int}/status"), Authorize(Roles = RoleNames.Organiser)]
     [ProducesResponseType<EventStatusResponse>(Status200OK)]
     [ProducesResponseType(Status400BadRequest)]

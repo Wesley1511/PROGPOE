@@ -72,7 +72,7 @@ public class ResultsController(RaceDayDbContext db) : ApiControllerBase
         return NoContent();
     }
 
-    /// <summary>Returns the public results board for an event, ordered by category and position. Supports a categoryId filter.</summary>
+    /// <summary>Returns the public results board for an event, ordered by category and position.</summary>
     [HttpGet("events/{eventId:int}/results"), AllowAnonymous]
     [ProducesResponseType<List<ResultsBoardRow>>(Status200OK)]
     [ProducesResponseType(Status404NotFound)]
