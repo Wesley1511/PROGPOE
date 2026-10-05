@@ -13,8 +13,7 @@ public static class Lookups
     public static readonly string[] EventStatuses = ["Draft", "Published", "Cancelled", "Completed"];
     public static readonly string[] Provinces =
     [
-        "Gauteng", "Western Cape", "KwaZulu-Natal", "Eastern Cape", "Free State",
-        "Limpopo", "Mpumalanga", "North West", "Northern Cape"
+        "Gauteng", "Western Cape", "KwaZulu-Natal", "Eastern Cape", "Free State", "Limpopo", "Mpumalanga", "North West", "Northern Cape"
     ];
     public static readonly string[] Genders = ["Male", "Female", "Other"];
     public static readonly string[] ShirtSizes = ["XS", "S", "M", "L", "XL", "XXL"];
