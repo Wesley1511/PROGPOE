@@ -12,7 +12,6 @@ namespace RaceDay.Api.Controllers;
 [Route("api/auth")]
 public class AuthController(RaceDayDbContext db, TokenService tokens) : ApiControllerBase
 {
-    // Registers a new Organiser or Participant account. Participants must also supply profile details. Passwords are hashed with BCrypt.
     [HttpPost("register"), AllowAnonymous]
     [ProducesResponseType<RegisterResponse>(Status201Created)]
     [ProducesResponseType(Status400BadRequest)]

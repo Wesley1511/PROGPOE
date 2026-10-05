@@ -74,7 +74,7 @@ public class EnrolmentsController(RaceDayDbContext db) : ApiControllerBase
         return Ok(rows);
     }
 
-    /// <summary>Returns one entry in full (digital race entry confirmation). Visible to the participant and the event's organiser.</summary>
+    /// <summary>Returns one entry in full. Visible to the participant and the event's organiser.</summary>
     [HttpGet("enrolments/{id:int}")]
     [ProducesResponseType<EnrolmentDetailResponse>(Status200OK)]
     [ProducesResponseType(Status403Forbidden)]

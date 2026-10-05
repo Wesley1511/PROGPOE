@@ -11,7 +11,7 @@ namespace RaceDay.Api.Controllers;
 [Route("api")]
 public class CategoriesController(RaceDayDbContext db) : ApiControllerBase
 {
-    /// <summary>Lists the distance options for an event with entry fee, start time and places remaining.</summary>
+    /// <summary>Lists the distance options for an event with entry fee and start time and places remaining.</summary>
     [HttpGet("events/{eventId:int}/categories"), AllowAnonymous]
     [ProducesResponseType<List<CategoryResponse>>(Status200OK)]
     [ProducesResponseType(Status404NotFound)]
