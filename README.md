@@ -46,7 +46,7 @@ Users register as an Organiser or a Participant. Passwords are hashed with BCryp
  
 ## 5: Unit tests
  
-The tests are in `RaceDay.Api.Tests` and use xUnit with an in-memory database. They cover registration and login, session use, event management, wrong-role and unauthenticated rejection, enrolments (capacity, minimum age, closed registration, duplicates, withdrawing) and results.
+The tests are in RaceDay.Api.Tests and use xUnit with an in-memory database. They cover registration and login, session use, event management, wrong-role and unauthenticated rejection, enrolments (capacity, minimum age, closed registration, duplicates, withdrawing) and results.
  
 Run them with:
  
