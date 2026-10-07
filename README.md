@@ -11,6 +11,7 @@ RaceDay is a full-stack, web-based event management platform for the South Afric
 - Manage the categories and route waypoints for those events
 - View all enrolments for their events and confirm or cancel them
 - Capture, correct, delete and bulk-upload participant results
+
 **Participant**
 - Create an account and maintain a racing profile
 - Browse published events and enter an event by selecting a category
