@@ -1,69 +1,69 @@
 # RaceDay — Wesley Linkmeyer ST10481890
-
+ 
 ## 1: About the system
-
+ 
 RaceDay is a full-stack, web-based event management platform for the South African road running, walking and cycling community. South Africa hosts a huge number of road events such as the Soweto Marathon, the Cape Town Cycle Tour, the Two Oceans, and hundreds of park runs and charity walks every weekend, yet many are still run on paper entry forms, spreadsheets and WhatsApp groups. RaceDay replaces that with a single system.
-
+ 
 ## 2: User roles
-
-|Role|Permissions|
-|-|-|
-|Organiser|Create, edit and delete their own events, manage the categories and route waypoints for those events, upload event media. view all enrolments for their events, capture, correct and delete participant results.|
-|Participant|Create an account and maintain a racing profile, browse published events; enter an event by selecting a category, view and withdraw from their own entries, view their own results, personal bests and race history.|
-
+ 
+**Organiser**
+- Create, edit and delete their own events
+- Manage the categories and route waypoints for those events
+- View all enrolments for their events and confirm or cancel them
+- Capture, correct, delete and bulk-upload participant results
+**Participant**
+- Create an account and maintain a racing profile
+- Browse published events and enter an event by selecting a category
+- View, change and withdraw from their own entries
+- View their own results, personal bests and race history
+ 
 ## 3: ERD Explanation
+ 
+The ERD, endpoint plan and SQL script from Part 1 are in the docs folder.
+ 
+### Differences from the Part 1 plan:
 
-|Entity|Purpose|
-|-|-|
-|Role|Lookup table holding the two system roles.|
-|AppUser|Every person who can log in.|
-|ParticipantProfile|An Optional 1:1 extension of AppUser holding racing-only details (date of birth, club, shirt size, emergency contact).|
-|Event|A single road event, owned by one Organiser.|
-|EventCategory|A distance option within an event (42.2 km, 21.1 km, 10 km fun run) with its own fee, start time and capacity.|
-|RouteWaypoint|Ordered points along a category's route, start, water points, distance markers, finish. Feeds the route map and the race-day weather lookup.|
-|Enrolment|The bridge that resolves the many-to-many relationship between participants and events, through a chosen category.|
-|Result|The outcome of one enrolment: finish time, positions and status.|
-|EventMedia|information for files stored in Azure Blob Storage in Part 3; only the blob URI is held in SQL.|
+* I added POST /api/auth/logout, which is needed to end a session.
+* As future proofing for part 3 I added GET /api/results/me also returns the overall position and total finishers, so Part 3 can show results like "47th of 312".
+* GET /api/events/{id}/weather also returns an isForecast flag and returns 400 if the event has no coordinates.
+* An enrolment is Confirmed when the amount paid covers the entry fee, otherwise it is Pending.
 
-Relationships:
+## 4: Running the API
+ 
+1. Install the .NET 8 SDK and SQL Server.
+2. Open RaceDay.sln.
+3. Run the RaceDay.Api project by pressing F5.
+4. Swagger opens at /swagger. On first start the API creates the RaceDayDb database and seeds the sample data.
 
-|Relationship|Cardinality|
-|-|-|
-|Role → AppUser|One to many|
-|AppUser → ParticipantProfile|One to one (optional)|
-|AppUser (Organiser) → Event|One to many|
-|Event → EventCategory|One to many|
-|EventCategory → RouteWaypoint|One to many|
-|AppUser (Participant) ↔ Event|Many to many, resolved by Enrolment|
-|Enrolment → Result|One to one (optional until the race is run)|
-|Event → EventMedia|One to many|
+Sample logins (password: Password123!):
+- Organiser: thabo.molefe@comradesrace.co.za
+- Participant: sipho.khumalo@gmail.com
+ 
+### Authentication
+ 
+Users register as an Organiser or a Participant. Passwords are hashed with BCrypt and never stored in plain text. On login the API creates a server-side session that stores the user ID and role, and it also returns a JWT. Either one works on protected endpoints. Swagger uses the session automatically, or you can click Authorize and paste the token.
+ 
+## 5: Unit tests
+ 
+The tests are in `RaceDay.Api.Tests` and use xUnit with an in-memory database. They cover registration and login, session use, event management, wrong-role and unauthenticated rejection, enrolments (capacity, minimum age, closed registration, duplicates, withdrawing) and results.
+ 
+Run them with:
+ 
+dotnet test
 
-### Design decisions:
-
-* Enrolment carries both EventId and CategoryId. CategoryId alone would be enough to derive the event, but storing both allows a composite foreign key to EventCategory (EventId, CategoryId). The database itself then guarantees that a participant can never be enrolled in a category belonging to a different event. It also lets UNIQUE (EventId, ParticipantId) stop double entries into the same event.
-* Finish times are stored as INT seconds, not TIME. This makes sorting, personal bests and average pace calculations straightforward, and avoids the 24-hour ceiling of TIME (relevant for ultra events such as Comrades).
-* Participant-only fields live in a separate table. Putting the emergency contact and shirt size on AppUser would leave those columns permanently NULL for every Organiser row.
-* One role per user. A user is either an Organiser or a Participant, matching the brief's two distinct roles. A junction table would allow a person to hold both roles; it was left out deliberately to keep the authorisation logic in Part 2 simple.
-
-## 4: Running the database script
-
-1. Open SQL Server Management Studio and connect to a local SQL Server instance.
-2. Open docs/RaceDay-Database.sql.
-3. Execute the whole script.
-4. The script drops and recreates RaceDayDb, so it is safe to run repeatedly.
-
-## 5: CI/CD
-
-The workflow in .github/workflows/validate-docs.yml runs on every push and pull request and fails the build if any required planning document is missing, if the SQL script does not contain the expected CREATE TABLE and INSERT statements, or if the ERD image is absent.
+## 6: CI/CD
 
 Screenshot:
 ![successful screenshot](docs/CICD.png)
 
+## 7: Video walkthrough
+ 
+Part 1 video: https://www.youtube.com/watch?v=29nPRYdDqjA
+ 
+Part 2 video:
+ 
+## 8: AI Disclosure
 
-## 6: Video walkthrough
+Claude was used in order to ensure full testing functionality was reached by pointing out gaps in my test cases, additionally it assisted in determining the nature of bugs that were found.
 
-Video: https://www.youtube.com/watch?v=29nPRYdDqjA
-
-## 7: AI Disclosure
-
-Claude was consulted for the creation of the description fields in the API endpoints document aswell as creating the sample data in the sql script. It was also used to fix a bug in the Validate.yml file that was causing a check to always return with exit code 1
+Claude was also used during the beginning of development to correct an issue with my file structure.
